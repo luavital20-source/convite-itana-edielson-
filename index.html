@@ -312,6 +312,25 @@
   }
   .btn-fill:hover{background:transparent;color:var(--green);}
   .btn-fill svg{width:15px;height:15px;flex-shrink:0;}
+  .rsvp-busca{position:relative;}
+  .rsvp-sug{
+    position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;list-style:none;
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 14px 34px rgba(38,48,42,.14);max-height:236px;overflow-y:auto;
+  }
+  .rsvp-sug li{padding:12px 14px;font-size:14.5px;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .rsvp-sug li + li{border-top:1px solid var(--line);}
+  .rsvp-sug li:hover,.rsvp-sug li.ativo{background:var(--green-pale);}
+  .rsvp-sug li small{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);}
+  .rsvp-sug li.vazio{cursor:default;color:var(--ink-soft);font-size:12.5px;line-height:1.6;background:none;}
+  .rsvp-dica{font-size:11.5px;line-height:1.6;color:var(--ink-soft);margin-top:8px;}
+  .rsvp-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .rsvp-chips:empty{display:none;}
+  .rsvp-chip{
+    display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--paper);
+    background:var(--green);border-radius:30px;padding:7px 8px 7px 14px;
+  }
+  .rsvp-chip button{width:20px;height:20px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:13px;line-height:1;cursor:pointer;}
   .rsvp-msg{font-size:12px;line-height:1.6;color:var(--red);margin-top:12px;text-align:center;min-height:1px;}
 
   /* ───────── FOOTER ───────── */
@@ -494,7 +513,7 @@
           <span class="manual-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 21s-7-4.5-9.3-9A5 5 0 0112 6a5 5 0 019.3 6c-2.3 4.5-9.3 9-9.3 9z"/></svg></span>
           <div>
             <h3>Convite individual</h3>
-            <p>Ao confirmar, informe quantas pessoas virão com você. Pedimos que respeitem os nomes indicados no convite.</p>
+            <p>Nosso convite é nominal. Ao confirmar, procure o seu nome na lista de convidados — e, se quiser, o de quem vem com você. Pedimos, com carinho, que respeitem os nomes da lista.</p>
           </div>
         </li>
         <li class="manual-item reveal">
@@ -536,30 +555,25 @@
       <h2 class="sec-title reveal">Você <span class="it">vem?</span></h2>
       <div class="divider reveal"><span class="ln"></span><span class="dot"></span><span class="ln r"></span></div>
 
-      <p class="rsvp-note reveal d1">Sua presença fará deste dia um momento ainda mais especial. Preencha abaixo e a confirmação chega direto no nosso WhatsApp.</p>
+      <p class="rsvp-note reveal d1">Sua presença fará deste dia um momento ainda mais especial. Procure seu nome na lista de convidados e a confirmação chega direto no nosso WhatsApp.</p>
       <p class="rsvp-prazo reveal d1" id="rsvpPrazo" style="display:none"></p>
 
       <form class="rsvp-form reveal d2" id="rsvpForm" novalidate>
         <div class="field">
-          <label for="rsvpNome">Seu nome</label>
-          <input id="rsvpNome" type="text" autocomplete="name" placeholder="Nome e sobrenome">
+          <label for="rsvpBusca">Procure seu nome</label>
+          <div class="rsvp-busca">
+            <input id="rsvpBusca" type="text" autocomplete="off" placeholder="Digite seu nome" role="combobox" aria-autocomplete="list" aria-controls="rsvpSug" aria-expanded="false">
+            <ul class="rsvp-sug" id="rsvpSug" role="listbox" hidden></ul>
+          </div>
+          <p class="rsvp-dica" id="rsvpDica">Vai com mais alguém da lista? Busque e toque em cada nome.</p>
+          <div class="rsvp-chips" id="rsvpChips"></div>
         </div>
         <div class="field">
-          <label>Você vai?</label>
+          <label>Presença</label>
           <div class="rsvp-opts">
             <input type="radio" name="vai" id="vaiSim" value="sim" checked><label for="vaiSim">Sim, vou!</label>
             <input type="radio" name="vai" id="vaiNao" value="nao"><label for="vaiNao">Não poderei</label>
           </div>
-        </div>
-        <div class="field" id="campoQtd">
-          <label for="rsvpQtd">Quantas pessoas (incluindo você)</label>
-          <select id="rsvpQtd">
-            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-          </select>
-        </div>
-        <div class="field" id="campoAcomp">
-          <label for="rsvpAcomp">Nome dos acompanhantes</label>
-          <input id="rsvpAcomp" type="text" placeholder="Opcional">
         </div>
         <button class="btn-fill" type="submit">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.490-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.53.07-.8.38-.28.3-1.05 1.03-1.05 2.5s1.08 2.9 1.23 3.1c.15.2 2.12 3.240 5.14 4.54.72.31 1.28.5 1.71.63.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/><path d="M12 2.2c-5.4 0-9.8 4.4-9.8 9.8 0 1.73.45 3.4 1.32 4.88L2.2 21.8l5.05-1.3A9.75 9.75 0 0012 21.8c5.4 0 9.8-4.4 9.8-9.8S17.4 2.2 12 2.2zm0 17.9c-1.6 0-3.16-.43-4.530-1.240l-.32-.19-3.36.86.9-3.28-.21-.34A8.08 8.08 0 013.9 12c0-4.47 3.630-8.1 8.1-8.1s8.1 3.63 8.1 8.1-3.63 8.1-8.1 8.1z"/></svg>
@@ -649,6 +663,31 @@ const CONFIG = {
   versiculo:    'Assim, já não são dois, mas uma só carne. Portanto, não separe o homem o que Deus uniu.',
   versiculoRef: 'Mateus 19:6',
 };
+
+/* ════════════════════════════════════════════════════════════
+   💌  LISTA DE CONVIDADOS — só quem está aqui consegue confirmar presença
+   ════════════════════════════════════════════════════════════ */
+const CONVIDADOS = [
+  'Cintia', 'Clara', 'Rodrigo', 'Ruth', 'Naiane', 'Joel', 'Arthur', 'Breno', 'Heitor', 'Nailton',
+  'Regiane', 'Nailton Júnior', 'Sabrina', 'Tâmara', 'Jadiel', 'Melissa', 'Thomas', 'Idelma',
+  'Gilvando', 'Gil Cássio', 'Júlia', 'Veronica', 'Onélia', 'José Olívio', 'Eltinelice', 'Milzo',
+  'Damares', 'Sandra', 'Cauê', 'Natália', 'Tersidnei', 'Liliane', 'Bruno', 'Lucas', 'Rozeval',
+  'Linaria', 'Erika', 'Camila', 'Valéria Cerqueira', 'Ranyson', 'Genivaldo Cruz', 'Marília',
+  'Maria Valentina', 'Beatriz', 'Maria das Graças', 'Marivaldo', 'Carlene', 'Adriano',
+  'Adriana Vitória', 'Bruno Santana', 'Adalbero', 'Fernanda', 'Heloísa', 'Tamires', 'João César',
+  'Carlos Victor', 'Margarida', 'Rosalino', 'Mércia', 'Nal', 'Ana Clara', 'Emília', 'Romenick',
+  'Deliane', 'Ian', 'Letícia', 'Rui', 'Jade', 'Arlane', 'Diego', 'Matheus', 'Miguel', 'Eneilda',
+  'Gabriela', 'André', 'Edineia', 'Alfran', 'Ediane', 'Evaldo', 'Denice Cruz', 'Mariana Cruz',
+  'Raimundo Carlos', 'Izabel', 'Ricardo Cardoso', 'Vanessa Teles', 'Ciro', 'Gilmara', 'Ilisson',
+  'Thainan', 'Eric Coni', 'Thayla', 'Claudia Reis', 'Anali Cavalcante', 'Ilana Cavalcante',
+  'Cecília', 'Romero', 'Rafael Souza', 'Maiara Souza', 'Antônio', 'Zilda', 'Gabriela Carmo',
+  'Louise', 'Antônio Júnior', 'Clarice Pereira', 'Júlia Pereira', 'Eric Pereira', 'João Telesforo',
+  'Carlos Eduardo', 'Vânia Freitas', 'Denise Araújo', 'Paulo Henrick Araújo', 'André Luís',
+  'Roseli', 'Ricardo Jeferson', 'Enthony', 'Ricardo Coni', 'Tanyles', 'Gabriel Coni', 'Edvaldo',
+  'Lilian', 'Felipe', 'Valéria Fernandes', 'Matheus Oliveira', 'Laís Batista', 'Siene Carmo',
+  'Genivaldo', 'Joana Pacheco', 'Júlia Pacheco', 'Antônia Pacheco', 'Jessica Vaz', 'Luiz Gualberto',
+  'Margarida Carmo', 'Mariana Rodrigues', 'Euridice Rodrigues', 'Ludmila Freitas', 'Igor Barreto',
+];
 
 /* ════════════════════════════════════════════════════════════
    🎁  PRESENTES — cotas da lista (valor em reais)
@@ -813,32 +852,66 @@ document.getElementById('pixmCopiar').addEventListener('click',async function(){
   });
 })();
 
-/* ─── Confirmação de presença (formulário → WhatsApp) ─── */
+/* ─── Confirmação de presença (lista de convidados → WhatsApp) ─── */
 (function(){
   const form=document.getElementById('rsvpForm');
   const msg=document.getElementById('rsvpMsg');
-  const nome=document.getElementById('rsvpNome');
-  const sync=()=>{
-    const vai=form.querySelector('input[name="vai"]:checked').value==='sim';
-    document.getElementById('campoQtd').style.display=vai?'':'none';
-    document.getElementById('campoAcomp').style.display=vai?'':'none';
-  };
-  form.querySelectorAll('input[name="vai"]').forEach(r=>r.addEventListener('change',sync));
-  nome.addEventListener('input',()=>{nome.classList.remove('erro');msg.textContent='';});
+  const busca=document.getElementById('rsvpBusca');
+  const sug=document.getElementById('rsvpSug');
+  const chips=document.getElementById('rsvpChips');
+  const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+  const lista=[...new Set(CONVIDADOS)].map(n=>({n,k:norm(n)}));
+  const escolhidos=[];
+  let ativo=-1, itens=[];
+  const fechar=()=>{sug.hidden=true;busca.setAttribute('aria-expanded','false');ativo=-1;};
+  function mostrar(){
+    const q=norm(busca.value);
+    msg.textContent='';
+    if(q.length<2){fechar();return;}
+    // começa pelo termo digitado (em qualquer palavra) → depois contém
+    const pal=lista.filter(c=>c.k.split(' ').some(w=>w.startsWith(q))||c.k.startsWith(q));
+    const cont=lista.filter(c=>!pal.includes(c)&&c.k.includes(q));
+    itens=[...pal,...cont].slice(0,8);
+    sug.innerHTML=itens.length
+      ? itens.map((c,i)=>`<li role="option" data-i="${i}">${c.n}${escolhidos.includes(c.n)?'<small>adicionado</small>':''}</li>`).join('')
+      : '<li class="vazio">Não encontramos esse nome na lista. Confira a grafia ou fale com os noivos.</li>';
+    sug.hidden=false;busca.setAttribute('aria-expanded','true');ativo=-1;
+  }
+  function render(){
+    chips.innerHTML=escolhidos.map((n,i)=>`<span class="rsvp-chip">${n}<button type="button" data-rm="${i}" aria-label="Remover ${n}">&times;</button></span>`).join('');
+  }
+  function escolher(i){
+    const c=itens[i]; if(!c) return;
+    if(!escolhidos.includes(c.n)) escolhidos.push(c.n);
+    busca.value='';fechar();render();busca.classList.remove('erro');msg.textContent='';
+  }
+  busca.addEventListener('input',mostrar);
+  busca.addEventListener('focus',mostrar);
+  busca.addEventListener('keydown',e=>{
+    if(sug.hidden||!itens.length) return;
+    const lis=[...sug.querySelectorAll('li[data-i]')];
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+      e.preventDefault();
+      ativo=(ativo+(e.key==='ArrowDown'?1:-1)+lis.length)%lis.length;
+      lis.forEach((li,i)=>li.classList.toggle('ativo',i===ativo));
+    }else if(e.key==='Enter'){e.preventDefault();escolher(ativo<0?0:ativo);}
+    else if(e.key==='Escape') fechar();
+  });
+  // pointerdown: escolhe antes do blur fechar a lista
+  sug.addEventListener('pointerdown',e=>{const li=e.target.closest('li[data-i]');if(li){e.preventDefault();escolher(Number(li.dataset.i));}});
+  busca.addEventListener('blur',()=>setTimeout(fechar,120));
+  chips.addEventListener('click',e=>{const b=e.target.closest('button[data-rm]');if(b){escolhidos.splice(Number(b.dataset.rm),1);render();}});
+
   form.addEventListener('submit',e=>{
     e.preventDefault();
-    const n=nome.value.trim();
-    if(!n){nome.classList.add('erro');msg.textContent='Por favor, informe seu nome.';nome.focus();return;}
+    if(!escolhidos.length){busca.classList.add('erro');msg.textContent='Procure e selecione seu nome na lista de convidados.';busca.focus();return;}
     if(!CONFIG.whatsapp){msg.textContent='A confirmação estará disponível em breve.';return;}
     const vai=form.querySelector('input[name="vai"]:checked').value==='sim';
-    let t;
-    if(vai){
-      const q=document.getElementById('rsvpQtd').value;
-      const ac=document.getElementById('rsvpAcomp').value.trim();
-      t=`Olá! Aqui é ${n} 💍\n\n✅ Confirmo minha presença no casamento de ${CONFIG.noivos} — ${CONFIG.dataTexto}.\n👥 Total de pessoas: ${q}`+(ac?`\nAcompanhantes: ${ac}`:'');
-    }else{
-      t=`Olá! Aqui é ${n} 💍\n\nInfelizmente não poderei comparecer ao casamento de ${CONFIG.noivos}, mas desejo muitas felicidades ao casal! ❤️`;
-    }
+    const nomes=escolhidos.map(n=>'• '+n).join('\n');
+    const varios=escolhidos.length>1;
+    const t=vai
+      ? `Olá! 💍\n\n✅ ${varios?'Confirmamos':'Confirmo'} presença no casamento de ${CONFIG.noivos} — ${CONFIG.dataTexto}:\n\n${nomes}\n\nTotal: ${escolhidos.length} ${varios?'pessoas':'pessoa'}`
+      : `Olá! 💍\n\nInfelizmente ${varios?'não poderemos':'não poderei'} comparecer ao casamento de ${CONFIG.noivos}:\n\n${nomes}\n\nDesejamos muitas felicidades ao casal! ❤️`;
     window.open('https://wa.me/'+CONFIG.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent(t),'_blank','noopener');
   });
 })();
