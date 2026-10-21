@@ -649,8 +649,8 @@ const CONFIG = {
   // ══ Pix — chave única, usada em todas as cotas ══
   // Preencha a chave (CPF só números, e-mail, telefone com +55 ou chave aleatória).
   // Enquanto estiver vazia, o modal mostra "chave disponível em breve".
-  pixChave:     '',
-  pixTitular:   'Itana e Edielson',   // nome que aparece no código Pix (sem acento é melhor)
+  pixChave:     '+5575991626129',   // celular (75) 99162-6129
+  pixTitular:   'Itana Cruz Carmo',   // nome que aparece no código Pix (sem acento é melhor)
   pixBanco:     '',                   // ex.: 'Banco do Brasil'
   pixCidade:    'Salvador',
 
@@ -758,7 +758,8 @@ function pixCode(valor){
   return p+pixCRC16(p);
 }
 function formatarChave(c){
-  return /^\d{11}$/.test(c) ? c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4') : c;
+  if(/^\+55\d{10,11}$/.test(c)) return c.slice(3).replace(/(\d{2})(\d{4,5})(\d{4})/,'($1) $2-$3');   // celular
+  return /^\d{11}$/.test(c) ? c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4') : c;            // CPF
 }
 const brl=v=>Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2});
 
